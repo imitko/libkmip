@@ -15,18 +15,19 @@
 /*
 Types and Constants
 */
-
-typedef int8_t int8;
+#ifndef NO_KMIP_TYPES
 typedef int16_t int16;
 typedef int32_t int32;
 typedef int64_t int64;
-typedef int32 bool32;
 
 typedef uint8_t uint8;
 typedef uint16_t uint16;
 typedef uint32_t uint32;
 typedef uint64_t uint64;
+#endif
 
+typedef int8_t int8;
+typedef int32 bool32;
 typedef size_t memory_index;
 
 #ifdef intptr_t
@@ -983,6 +984,11 @@ typedef struct key_block
     KeyWrappingData *key_wrapping_data;
 } KeyBlock;
 
+typedef struct crypto_key
+{
+  KeyBlock *key_block;
+} CryptoKey;
+
 typedef struct symmetric_key
 {
     KeyBlock *key_block;
@@ -1064,6 +1070,24 @@ typedef struct destroy_response_payload
 {
     TextString *unique_identifier;
 } DestroyResponsePayload;
+
+typedef struct register_request_payload
+{
+    /* KMIP 1.0 */
+    enum object_type object_type;
+    TemplateAttribute *template_attribute;
+    void *object;
+    /* KMIP 2.0 */
+    Attributes *attributes;
+    ProtectionStorageMasks *protection_storage_masks;
+} RegisterRequestPayload;
+
+typedef struct register_response_payload
+{
+    /* KMIP 1.0 */
+    TextString *unique_identifier;
+    TemplateAttribute *template_attribute;
+} RegisterResponsePayload;
 
 /* Authentication Structures */
 
@@ -1533,6 +1557,8 @@ void kmip_free_query_response_payload(KMIP *, QueryResponsePayload *);
 void kmip_free_operations(KMIP *ctx, Operations *value);
 void kmip_free_objects(KMIP *ctx, ObjectTypes* value);
 void kmip_free_server_information(KMIP* ctx, ServerInformation* value);
+void kmip_free_register_request_payload(KMIP *ctx, RegisterRequestPayload *value);
+void kmip_free_register_response_payload(KMIP *ctx, RegisterResponsePayload *value);
 
 /*
 Copying Functions
@@ -1663,6 +1689,7 @@ int kmip_encode_response_message(KMIP *, const ResponseMessage *);
 int kmip_encode_query_functions(KMIP *ctx, const Functions*);
 int kmip_encode_query_request_payload(KMIP *, const QueryRequestPayload *);
 int kmip_encode_query_response_payload(KMIP *, const QueryResponsePayload *);
+int kmip_encode_register_request_payload(KMIP *, const RegisterRequestPayload *);
 
 /*
 Decoding Functions
@@ -1726,6 +1753,7 @@ int kmip_decode_object_types(KMIP *, ObjectTypes *);
 int kmip_decode_query_request_payload(KMIP *, QueryRequestPayload *);
 int kmip_decode_query_response_payload(KMIP *, QueryResponsePayload *);
 int kmip_decode_server_information(KMIP *ctx, ServerInformation *);
+int kmip_decode_register_response_payload(KMIP *, RegisterResponsePayload *);
 
 
 #endif  /* KMIP_H */

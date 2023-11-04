@@ -24,6 +24,7 @@ typedef struct last_result
 } LastResult;
 
 int kmip_set_last_result(ResponseBatchItem*);
+int kmip_set_last_result_r(ResponseBatchItem* value, LastResult *result);
 const LastResult* kmip_get_last_result(void);
 int kmip_last_reason(void);
 const char* kmip_last_message(void);
@@ -41,6 +42,8 @@ int kmip_bio_destroy_symmetric_key(BIO *, char *, int);
 int kmip_bio_create_symmetric_key_with_context(KMIP *, BIO *, TemplateAttribute *, char **, int *);
 int kmip_bio_get_symmetric_key_with_context(KMIP *, BIO *, char *, int, char **, int *);
 int kmip_bio_destroy_symmetric_key_with_context(KMIP *, BIO *, char *, int);
+
+int kmip_bio_get_key_with_context(KMIP *, BIO *, char *, int , char **, int *, int *, int *, LastResult *);
 
 int kmip_bio_query_with_context(KMIP *ctx, BIO *bio, enum query_function queries[], size_t query_count, QueryResponse* query_result);
 int kmip_bio_send_request_encoding(KMIP *, BIO *, char *, int, char **, int *);
