@@ -70,6 +70,7 @@ DEMO_O_FILES = $(OBJ_DIR)/demo_get.o
 DEMO_O_FILES += $(OBJ_DIR)/demo_create.o
 DEMO_O_FILES += $(OBJ_DIR)/demo_destroy.o
 DEMO_O_FILES += $(OBJ_DIR)/demo_query.o
+DEMO_O_FILES += $(OBJ_DIR)/demo_register.o
 
 TEST_O_FILES = $(OBJ_DIR)/tests.o
 
@@ -86,7 +87,8 @@ demos: objs \
        $(BIN_DIR)/demo_get \
        $(BIN_DIR)/demo_create \
        $(BIN_DIR)/demo_destroy \
-       $(BIN_DIR)/demo_query
+       $(BIN_DIR)/demo_query \
+       $(BIN_DIR)/demo_register
 
 tests: objs \
        $(TEST_O_FILES) \
@@ -103,6 +105,8 @@ $(BIN_DIR)/demo_create: $(OBJ_DIR)/demo_create.o $(SRC_O_FILES)
 $(BIN_DIR)/demo_destroy: $(OBJ_DIR)/demo_destroy.o $(SRC_O_FILES)
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 $(BIN_DIR)/demo_query: $(OBJ_DIR)/demo_query.o $(SRC_O_FILES)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+$(BIN_DIR)/demo_register: $(OBJ_DIR)/demo_register.o $(SRC_O_FILES)
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 $(BIN_DIR)/tests: $(TEST_O_FILES) $(OBJ_DIR)/kmip.o $(OBJ_DIR)/kmip_io.o $(OBJ_DIR)/kmip_memset.o
@@ -125,6 +129,8 @@ $(OBJ_DIR)/demo_create.o: $(DEMO_DIR)/demo_create.c $(H_FILES)
 $(OBJ_DIR)/demo_destroy.o: $(DEMO_DIR)/demo_destroy.c $(H_FILES)
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
 $(OBJ_DIR)/demo_query.o: $(DEMO_DIR)/demo_query.c $(H_FILES)
+	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
+$(OBJ_DIR)/demo_register.o: $(DEMO_DIR)/demo_register.c $(H_FILES)
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
 
 $(OBJ_DIR)/tests.o: $(TEST_DIR)/tests.c $(INC_DIR)/kmip.h $(INC_DIR)/kmip_io.h $(INC_DIR)/kmip_memset.h
