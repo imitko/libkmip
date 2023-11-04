@@ -2753,6 +2753,35 @@ kmip_print_create_response_payload(FILE *f, int indent, CreateResponsePayload *v
 }
 
 void
+kmip_print_register_request_payload(FILE *f, int indent, RegisterRequestPayload *value)
+{
+    fprintf(f, "%*sRegister Request Payload @ %p\n", indent, "", (void *)value);
+    
+    if(value != NULL)
+    {
+        fprintf(f, "%*sObject Type: ", indent + 2, "");
+        kmip_print_object_type_enum(f, value->object_type);
+        fprintf(f, "\n");
+        
+        kmip_print_template_attribute(f, indent + 2, value->template_attribute);
+        kmip_print_attributes(f, indent + 2, value->attributes);
+        kmip_print_protection_storage_masks(f, indent + 2, value->protection_storage_masks);
+    }
+}
+
+void
+kmip_print_register_response_payload(FILE *f, int indent, RegisterResponsePayload *value)
+{
+    fprintf(f, "%*sRegister Response Payload @ %p\n", indent, "", (void *)value);
+    
+    if(value != NULL)
+    {
+        kmip_print_text_string(f, indent + 2, "Unique Identifier", value->unique_identifier);
+        kmip_print_template_attribute(f, indent + 2, value->template_attribute);
+    }
+}
+
+void
 kmip_print_get_request_payload(FILE *f, int indent, GetRequestPayload *value)
 {
     fprintf(f, "%*sGet Request Payload @ %p\n", indent, "", (void *)value);
@@ -2838,6 +2867,10 @@ kmip_print_request_payload(FILE *f, int indent, enum operation type, void *value
         kmip_print_query_request_payload(f, indent, value);
         break;
 
+        case KMIP_OP_REGISTER:
+        kmip_print_register_request_payload(f, indent, value);
+        break;
+
         default:
         fprintf(f, "%*sUnknown Payload @ %p\n", indent, "", value);
         break;
@@ -2864,6 +2897,11 @@ kmip_print_response_payload(FILE *f, int indent, enum operation type, void *valu
         case KMIP_OP_QUERY:
         kmip_print_query_response_payload(f, indent, value);
         break;
+
+        case KMIP_OP_REGISTER:
+        kmip_print_register_response_payload(f, indent, value);
+        break;
+        
 
         default:
         fprintf(f, "%*sUnknown Payload @ %p\n", indent, "", value);
